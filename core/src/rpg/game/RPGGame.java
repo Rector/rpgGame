@@ -22,6 +22,7 @@ public class RPGGame extends ApplicationAdapter {
 	// с запретом на выезд за пределы карты
 	// 3. * Снаряд должен выпускаться в сторону последнего движения
 
+
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
