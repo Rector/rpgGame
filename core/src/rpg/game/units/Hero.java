@@ -2,9 +2,8 @@ package rpg.game.units;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector2;
 import rpg.game.GameController;
 import rpg.game.GameMap;
@@ -15,6 +14,10 @@ public class Hero extends Unit {
     float movementMaxTime;
     int targetX, targetY;
 
+    private int experience;
+    private BitmapFont bitmapFont;
+    private int counter;
+
     public Hero(TextureAtlas atlas, GameController gc) {
         super(gc, 1, 1, 10);
         this.texture = atlas.findRegion("knight");
@@ -22,6 +25,11 @@ public class Hero extends Unit {
         this.movementMaxTime = 0.2f;
         this.targetX = cellX;
         this.targetY = cellY;
+
+        this.experience = 0;
+        this.bitmapFont = new BitmapFont();
+        bitmapFont.setColor(Color.WHITE);
+        this.counter = 5;
     }
 
     public void update(float dt) {
@@ -37,7 +45,13 @@ public class Hero extends Unit {
             if (Math.abs(gc.getCursorX() - cellX) + Math.abs(gc.getCursorY() - cellY) == 1) {
                 targetX = gc.getCursorX();
                 targetY = gc.getCursorY();
+
+                counter--;
+                if (counter == 0) {
+                    counter = 5;
+                }
             }
+
         }
 
         Monster m = gc.getMonsterController().getMonsterInCell(targetX, targetY);
@@ -45,7 +59,12 @@ public class Hero extends Unit {
             targetX = cellX;
             targetY = cellY;
             m.takeDamage(1);
+
+            if (m.hp == 0) {
+                experience++;
+            }
         }
+
 
         if (!gc.getGameMap().isCellPassable(targetX, targetY)) {
             targetX = cellX;
@@ -78,5 +97,8 @@ public class Hero extends Unit {
         batch.setColor(0.0f, 1.0f, 0.0f, 1.0f);
         batch.draw(textureHp, px + 2, py + 52, (float) hp / hpMax * 56, 8);
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+        bitmapFont.draw(batch, "Experience Hero: " + experience, 10, 700);
+        bitmapFont.draw(batch, "Counter: " + counter, px - 8, py + 5);
     }
 }
