@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import rpg.game.GameController;
 import rpg.game.GameMap;
 
+import java.util.Random;
+
 public abstract class Unit {
     GameController gc;
     TextureRegion texture;
@@ -15,6 +17,8 @@ public abstract class Unit {
     int cellX;
     int cellY;
     Vector2 tmp;
+
+    private Random random = new Random();
 
     public int getCellX() {
         return cellX;
@@ -35,6 +39,13 @@ public abstract class Unit {
 
     public boolean takeDamage(int amount) {
         hp -= amount;
+        return hp <= 0;
+    }
+
+    public boolean counterattack(int amount) {
+        if((random.nextInt(100) + 1) <= 25){
+            hp -= amount;
+        }
         return hp <= 0;
     }
 

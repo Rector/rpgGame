@@ -36,6 +36,10 @@ public class Hero extends Unit {
         checkMovement(dt);
     }
 
+    public boolean isActive() {
+        return hp > 0;
+    }
+
     public boolean isStayStill() {
         return cellY == targetY && cellX == targetX;
     }
@@ -55,10 +59,13 @@ public class Hero extends Unit {
         }
 
         Monster m = gc.getMonsterController().getMonsterInCell(targetX, targetY);
+
         if (m != null) {
             targetX = cellX;
             targetY = cellY;
             m.takeDamage(1);
+
+            gc.getHero().counterattack(1);
 
             if (m.hp == 0) {
                 experience++;
@@ -85,20 +92,26 @@ public class Hero extends Unit {
     public void render(SpriteBatch batch) {
         float px = cellX * GameMap.CELL_SIZE;
         float py = cellY * GameMap.CELL_SIZE;
-        if (!isStayStill()) {
+
+
+        if (!isStayStill() && gc.getHero().isActive()) {
             px = cellX * GameMap.CELL_SIZE + (targetX - cellX) * (movementTime / movementMaxTime) * GameMap.CELL_SIZE;
             py = cellY * GameMap.CELL_SIZE + (targetY - cellY) * (movementTime / movementMaxTime) * GameMap.CELL_SIZE;
         }
-        batch.draw(texture, px, py);
-        batch.setColor(0.0f, 0.0f, 0.0f, 1.0f);
-        batch.draw(textureHp, px + 1, py + 51, 58, 10);
-        batch.setColor(0.7f, 0.0f, 0.0f, 1.0f);
-        batch.draw(textureHp, px + 2, py + 52, 56, 8);
-        batch.setColor(0.0f, 1.0f, 0.0f, 1.0f);
-        batch.draw(textureHp, px + 2, py + 52, (float) hp / hpMax * 56, 8);
-        batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-        bitmapFont.draw(batch, "Experience Hero: " + experience, 10, 700);
-        bitmapFont.draw(batch, "Counter: " + counter, px - 8, py + 5);
+        if(gc.getHero().isActive()){
+            batch.draw(texture, px, py);
+            batch.setColor(0.0f, 0.0f, 0.0f, 1.0f);
+            batch.draw(textureHp, px + 1, py + 51, 58, 10);
+            batch.setColor(0.7f, 0.0f, 0.0f, 1.0f);
+            batch.draw(textureHp, px + 2, py + 52, 56, 8);
+            batch.setColor(0.0f, 1.0f, 0.0f, 1.0f);
+            batch.draw(textureHp, px + 2, py + 52, (float) hp / hpMax * 56, 8);
+            batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+            bitmapFont.draw(batch, "Experience Hero: " + experience, 10, 700);
+            bitmapFont.draw(batch, "Counter: " + counter, px - 8, py + 5);
+        }
+
     }
 }
