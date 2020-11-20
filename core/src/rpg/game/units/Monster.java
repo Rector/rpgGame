@@ -1,6 +1,7 @@
 package rpg.game.units;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.MathUtils;
 import rpg.game.GameController;
 
 public class Monster extends Unit {
@@ -44,10 +45,16 @@ public class Monster extends Unit {
     public void tryToMove() {
         int bestX = -1, bestY = -1;
         float bestDst = 10000;
+
+        float dstToHero = 5.0F;
+
         for (int i = cellX - 1; i <= cellX + 1; i++) {
             for (int j = cellY - 1; j <= cellY + 1; j++) {
-                if (Math.abs(cellX - i) + Math.abs(cellY - j) == 1 && gc.getGameMap().isCellPassable(i, j) && gc.getUnitController().isCellFree(i, j)) {
-                    float dst = (float) Math.sqrt((i - target.getCellX()) * (i - target.getCellX()) + (j - target.getCellY()) * (j - target.getCellY()));
+                if (Math.abs(cellX - i) + Math.abs(cellY - j) == 1
+                        && gc.getGameMap().isCellPassable(i, j) && gc.getUnitController().isCellFree(i, j)) {
+                    float dst = (float) Math.sqrt((i - target.getCellX()) * (i - target.getCellX())
+                            + (j - target.getCellY()) * (j - target.getCellY()));
+
                     if (dst < bestDst) {
                         bestDst = dst;
                         bestX = i;
@@ -56,6 +63,35 @@ public class Monster extends Unit {
                 }
             }
         }
-        goTo(bestX, bestY);
+
+        if (bestDst <= dstToHero) {
+            goTo(bestX, bestY);
+        }
+
+        if(bestDst > dstToHero) {
+            randomMove();
+        }
     }
+
+    public void randomMove(){
+        int randomX = -1;
+        int randomY = -1;
+
+        for (int i = cellX - 1; i <= cellX + 1; i++) {
+            for (int j = cellY - 1; j <= cellY + 1; j++) {
+                if (Math.abs(cellX - i) + Math.abs(cellY - j) == 1
+                        && gc.getGameMap().isCellPassable(i, j) && gc.getUnitController().isCellFree(i, j)) {
+                    randomX = i;
+                    randomY = j;
+
+                    if(MathUtils.random() < 0.1F){
+                        break;
+                    }
+                }
+            }
+        }
+        goTo(randomX, randomY);
+    }
+
+
 }
