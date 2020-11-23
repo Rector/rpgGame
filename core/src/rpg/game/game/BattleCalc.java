@@ -1,7 +1,6 @@
-package rpg.game;
+package rpg.game.game;
 
 import com.badlogic.gdx.math.MathUtils;
-import rpg.game.units.Unit;
 
 public class BattleCalc {
     public static int attack(Unit attacker, Unit target) {

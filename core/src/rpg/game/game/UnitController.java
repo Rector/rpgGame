@@ -1,10 +1,9 @@
-package rpg.game;
+package rpg.game.game;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import rpg.game.units.Hero;
-import rpg.game.units.Monster;
-import rpg.game.units.Unit;
+import rpg.game.game.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +37,10 @@ public class UnitController {
         return true;
     }
 
-    public UnitController(GameController gc, TextureAtlas atlas) {
+    public UnitController(GameController gc) {
         this.gc = gc;
-        this.hero = new Hero(atlas, gc);
-        this.monsterController = new MonsterController(gc, atlas);
+        this.hero = new Hero(gc);
+        this.monsterController = new MonsterController(gc);
     }
 
     public void init() {
@@ -50,11 +49,7 @@ public class UnitController {
         this.index = -1;
         this.allUnits = new ArrayList<>();
         this.allUnits.add(hero);
-        for (Monster m : monsterController.getMonsters()) {
-            if (m.isActive()) {
-                this.allUnits.add(m);
-            }
-        }
+        this.allUnits.addAll(monsterController.getActiveList());
         this.nextTurn();
     }
 
@@ -67,9 +62,9 @@ public class UnitController {
         currentUnit.startTurn();
     }
 
-    public void render(SpriteBatch batch) {
-        hero.render(batch);
-        monsterController.render(batch);
+    public void render(SpriteBatch batch, BitmapFont font18) {
+        hero.render(batch, font18);
+        monsterController.render(batch, font18);
     }
 
     public void update(float dt) {
