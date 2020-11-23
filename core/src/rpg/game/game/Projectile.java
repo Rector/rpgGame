@@ -1,15 +1,17 @@
-package rpg.game;
+package rpg.game.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import rpg.game.helpers.Poolable;
 
-public class Projectile {
+public class Projectile implements Poolable {
     private TextureRegion texture;
     private Vector2 position;
     private Vector2 velocity;
     private boolean active;
 
+    @Override
     public boolean isActive() {
         return active;
     }

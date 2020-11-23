@@ -1,10 +1,11 @@
-package rpg.game;
+package rpg.game.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import rpg.game.units.Hero;
 
 public class GameController {
+    private SpriteBatch batch;
     private ProjectileController projectileController;
     private UnitController unitController;
     private GameMap gameMap;
@@ -31,10 +32,11 @@ public class GameController {
         return unitController;
     }
 
-    public GameController(TextureAtlas atlas) {
-        this.gameMap = new GameMap(atlas);
-        this.unitController = new UnitController(this, atlas);
-        this.projectileController = new ProjectileController(atlas);
+    public GameController(SpriteBatch batch) {
+        this.batch = batch;
+        this.gameMap = new GameMap();
+        this.unitController = new UnitController(this);
+        this.projectileController = new ProjectileController();
         this.unitController.init();
     }
 
