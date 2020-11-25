@@ -16,12 +16,18 @@ public class UnitController {
     private int index;
     private List<Unit> allUnits;
 
+    private int counterRound = 0;
+
     public MonsterController getMonsterController() {
         return monsterController;
     }
 
     public Hero getHero() {
         return hero;
+    }
+
+    public int getCounterRound() {
+        return counterRound;
     }
 
     public boolean isItMyTurn(Unit unit) {
@@ -60,6 +66,23 @@ public class UnitController {
         }
         currentUnit = allUnits.get(index);
         currentUnit.startTurn();
+
+// 5. Попробуйте посчитать раунды ( каждый раз, когда ход переходит к игроку
+// номер раунда должен увеличиваться )
+        if (currentUnit instanceof Hero) {
+            counterRound++;
+
+// 6. В начале 3 раунда должен появиться новый монстр ( * каждого третьего )
+            if (counterRound % 3 == 0){
+               addMonster();
+            }
+        }
+    }
+
+    public void addMonster(){
+        this.monsterController.activate(18,6);
+        Monster m = gc.getUnitController().getMonsterController().getMonsterInCell(18,6);
+        allUnits.add(m);
     }
 
     public void render(SpriteBatch batch, BitmapFont font18) {

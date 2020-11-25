@@ -39,6 +39,7 @@ public abstract class Unit implements Poolable {
         return cellY;
     }
 
+
     public Unit(GameController gc, int cellX, int cellY, int hpMax) {
         this.gc = gc;
         this.hpMax = hpMax;
@@ -55,8 +56,20 @@ public abstract class Unit implements Poolable {
         this.innerTimer = MathUtils.random(1000.0f);
     }
 
+// 7. В начале хода персонажи восстанавливают 1 хп
     public void startTurn() {
+        if(gc.getUnitController().getCounterRound() >= 1){
+            restoreHp();
+        }
         turns = maxTurns;
+    }
+
+    public void restoreHp() {
+        if (hp >= hpMax) {
+            hp = hpMax;
+        } else {
+            hp++;
+        }
     }
 
     @Override
@@ -126,13 +139,21 @@ public abstract class Unit implements Poolable {
 
 
         float barX = px, barY = py + MathUtils.sin(innerTimer * 5.0f) * 2;
-        batch.draw(textureHp, barX + 1, barY + 51, 58, 10);
-        batch.setColor(0.7f, 0.0f, 0.0f, 1.0f);
-        batch.draw(textureHp, barX + 2, barY + 52, 56, 8);
-        batch.setColor(0.0f, 1.0f, 0.0f, 1.0f);
-        batch.draw(textureHp, barX + 2, barY + 52, (float) hp / hpMax * 56, 8);
-        batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        font18.draw(batch, "" + hp, barX, barY + 64, 60, 1, false);
+
+// 3. Если жизнь персонажа 100% то полоска жизни должна отрисовываться с альфа 0.2
+        if (hp == hpMax) {
+            batch.setColor(0.7f, 0.0f, 0.0f, 0.2F);
+            batch.draw(textureHp, barX + 1, barY + 51, 58, 10);
+            batch.setColor(1.0f, 1.0f, 1.0f, 1.0F);
+        } else {
+            batch.draw(textureHp, barX + 1, barY + 51, 58, 10);
+            batch.setColor(0.7f, 0.0f, 0.0f, 1.0F);
+            batch.draw(textureHp, barX + 2, barY + 52, 56, 8);
+            batch.setColor(0.0f, 1.0f, 0.0f, 1.0F);
+            batch.draw(textureHp, barX + 2, barY + 52, (float) hp / hpMax * 56, 8);
+            batch.setColor(1.0f, 1.0f, 1.0f, 1.0F);
+            font18.draw(batch, "" + hp, barX, barY + 64, 60, 1, false);
+        }
     }
 
     public int getTurns() {
