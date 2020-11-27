@@ -7,11 +7,10 @@ import rpg.game.helpers.Assets;
 
 public class Hero extends Unit {
     private String name;
-    private int quantityCoins = 0;
 
     public Hero(GameController gc) {
         super(gc, 1, 1, 10);
-        this.name = "Sir Mullih";
+        this.name = "Sir Lancelot";
         this.hpMax = 100;
         this.hp = this.hpMax;
         this.texture = Assets.getInstance().getAtlas().findRegion("knight");
@@ -24,23 +23,17 @@ public class Hero extends Unit {
             Monster m = gc.getUnitController().getMonsterController().getMonsterInCell(gc.getCursorX(), gc.getCursorY());
             if (m != null && canIAttackThisTarget(m)) {
                 attack(m);
-
-// 4. При убийстве монстра персонаж может получить 1-3 монеты
-                if (!m.isActive()) {
-                    quantityCoins += MathUtils.random(1, 3);
-                }
             } else {
                 goTo(gc.getCursorX(), gc.getCursorY());
             }
         }
     }
 
-    public String getName() {
-        return name;
+    public void renderHUD(SpriteBatch batch, BitmapFont font, int x, int y) {
+        stringHelper.setLength(0);
+        stringHelper
+                .append("Player: ").append(name).append("\n")
+                .append("Gold: ").append(gold).append("\n");
+        font.draw(batch, stringHelper, x, y);
     }
-
-    public int getQuantityCoinsTheHero() {
-        return quantityCoins;
-    }
-
 }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import rpg.game.helpers.Assets;
+import rpg.game.screens.ScreenManager;
 
 public class WorldRenderer {
     private GameController gc;
@@ -14,6 +15,7 @@ public class WorldRenderer {
     private TextureRegion cursorTexture;
     private BitmapFont font18;
     private BitmapFont font24;
+    private StringBuilder stringHelper;
 
     public WorldRenderer(GameController gc, SpriteBatch batch) {
         this.gc = gc;
@@ -21,6 +23,7 @@ public class WorldRenderer {
         this.cursorTexture = Assets.getInstance().getAtlas().findRegion("cursor");
         this.font18 = Assets.getInstance().getAssetManager().get("fonts/font18.ttf");
         this.font24 = Assets.getInstance().getAssetManager().get("fonts/font24.ttf");
+        this.stringHelper = new StringBuilder();
     }
 
     public void render() {
@@ -33,17 +36,16 @@ public class WorldRenderer {
         batch.setColor(1, 1, 1, 0.5f);
         batch.draw(cursorTexture, gc.getCursorX() * GameMap.CELL_SIZE, gc.getCursorY() * GameMap.CELL_SIZE);
         batch.setColor(1, 1, 1, 1);
-
-// 2. Необходимо вывести на экран: имя персонажа, количество монет
-        font24.draw(batch, "Player: " + gc.getUnitController().getHero().getName(), 20, 710);
-        font24.setColor(Color.GOLD);
-        font24.draw(batch, "Quantity Coins the Hero: " + gc.getUnitController().getHero().getQuantityCoinsTheHero(), 20, 670);
-
-        font24.setColor(0.76F, 0.0F, 0.0F, 1.0F);
-        font24.draw(batch, "ROUND: " + gc.getUnitController().getCounterRound(), 640, 690);
-
-
-        font24.setColor(Color.WHITE);
         batch.end();
+
+        float camX = ScreenManager.getInstance().getCamera().position.x;
+        float camY = ScreenManager.getInstance().getCamera().position.y;
+        ScreenManager.getInstance().resetCamera();
+        batch.begin();
+        gc.getUnitController().getHero().renderHUD(batch, font24, 10, ScreenManager.WORLD_HEIGHT - 10);
+        batch.end();
+
+        ScreenManager.getInstance().pointCameraTo(camX, camY);
     }
 }
+

@@ -3,11 +3,14 @@ package rpg.game.game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.MathUtils;
+import lombok.Data;
 import rpg.game.game.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class UnitController {
     private GameController gc;
     private MonsterController monsterController;
@@ -16,26 +19,13 @@ public class UnitController {
     private int index;
     private List<Unit> allUnits;
 
-    private int counterRound = 0;
-
-    public MonsterController getMonsterController() {
-        return monsterController;
-    }
-
-    public Hero getHero() {
-        return hero;
-    }
-
-    public int getCounterRound() {
-        return counterRound;
-    }
-
     public boolean isItMyTurn(Unit unit) {
         return currentUnit == unit;
     }
 
     public boolean isCellFree(int cellX, int cellY) {
-        for (Unit u : allUnits) {
+        for (int i = 0; i < allUnits.size(); i++) {
+            Unit u = allUnits.get(i);
             if (u.getCellX() == cellX && u.getCellY() == cellY) {
                 return false;
             }
@@ -45,44 +35,34 @@ public class UnitController {
 
     public UnitController(GameController gc) {
         this.gc = gc;
+        this.allUnits = new ArrayList<>();
         this.hero = new Hero(gc);
         this.monsterController = new MonsterController(gc);
     }
 
-    public void init() {
-        this.monsterController.activate(5, 5);
-        this.monsterController.activate(9, 5);
-        this.index = -1;
-        this.allUnits = new ArrayList<>();
+    public void init(int monsterCount) {
         this.allUnits.add(hero);
-        this.allUnits.addAll(monsterController.getActiveList());
+        for (int i = 0; i < monsterCount; i++) {
+            this.createMonsterInRandomCell();
+        }
+        this.index = -1;
         this.nextTurn();
+    }
+
+    public void startRound() {
+        for (int i = 0; i < getAllUnits().size(); i++) {
+            getAllUnits().get(i).startRound();
+        }
     }
 
     public void nextTurn() {
         index++;
         if (index >= allUnits.size()) {
             index = 0;
+            gc.roundUp();
         }
         currentUnit = allUnits.get(index);
         currentUnit.startTurn();
-
-// 5. Попробуйте посчитать раунды ( каждый раз, когда ход переходит к игроку
-// номер раунда должен увеличиваться )
-        if (currentUnit instanceof Hero) {
-            counterRound++;
-
-// 6. В начале 3 раунда должен появиться новый монстр ( * каждого третьего )
-            if (counterRound % 3 == 0){
-               addMonster();
-            }
-        }
-    }
-
-    public void addMonster(){
-        this.monsterController.activate(18,6);
-        Monster m = gc.getUnitController().getMonsterController().getMonsterInCell(18,6);
-        allUnits.add(m);
     }
 
     public void render(SpriteBatch batch, BitmapFont font18) {
@@ -105,5 +85,20 @@ public class UnitController {
         if (unitIndex <= index) {
             index--;
         }
+    }
+
+    public void createMonsterInRandomCell() {
+        int cellX = -1, cellY = -1;
+        do {
+            cellX = MathUtils.random(gc.getGameMap().getCellsX() - 1);
+            cellY = MathUtils.random(gc.getGameMap().getCellsY() - 1);
+        } while (!gc.isCellEmpty(cellX, cellY));
+
+        createMonster(cellX, cellY);
+    }
+
+    public void createMonster(int cellX, int cellY) {
+        Monster m = monsterController.activate(cellX, cellY);
+        allUnits.add(m);
     }
 }
