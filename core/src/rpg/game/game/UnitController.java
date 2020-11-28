@@ -2,10 +2,8 @@ package rpg.game.game;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import lombok.Data;
-import rpg.game.game.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +72,7 @@ public class UnitController {
         hero.update(dt);
         monsterController.update(dt);
 
-        if (!currentUnit.isActive() || currentUnit.getTurns() == 0) {
+        if (!currentUnit.isActive() || currentUnit.getMovementPoints() == 0) {
             nextTurn();
         }
     }

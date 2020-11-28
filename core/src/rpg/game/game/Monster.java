@@ -1,6 +1,5 @@
 package rpg.game.game;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import rpg.game.helpers.Assets;
 import rpg.game.helpers.Utils;
@@ -29,7 +28,7 @@ public class Monster extends Unit {
 
     public void update(float dt) {
         super.update(dt);
-        if (canIMakeAction()) {
+        if (canIMakeMovement()) {
             if (isStayStill()) {
                 aiBrainsImplseTime += dt;
             }
@@ -41,12 +40,12 @@ public class Monster extends Unit {
     }
 
     public void think(float dt) {
-        if (canIAttackThisTarget(target)) {
+        if (canIAttackThisTarget(target) && canIMakeAttack()) {
             attack(target);
             return;
         }
         if (amIBlocked()) {
-            turns = 0;
+            movementPoints = 0;
             return;
         }
         if (Utils.getCellsIntDistance(cellX, cellY, target.getCellX(), target.getCellY()) < 5) {

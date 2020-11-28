@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import lombok.Data;
 import rpg.game.screens.ScreenManager;
@@ -11,7 +12,6 @@ import rpg.game.screens.ScreenManager;
 @Data
 public class GameController {
     public static final int INITIAL_MONSTERS_COUNT = 3;
-    public static final int TURNS_COUNT = 5;
 
     private SpriteBatch batch;
     private ProjectileController projectileController;

@@ -2,7 +2,6 @@ package rpg.game.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.math.MathUtils;
 import rpg.game.helpers.Assets;
 
 public class Hero extends Unit {
@@ -19,9 +18,9 @@ public class Hero extends Unit {
 
     public void update(float dt) {
         super.update(dt);
-        if (Gdx.input.justTouched() && canIMakeAction()) {
+        if (Gdx.input.justTouched() && canIMakeMovement()) {
             Monster m = gc.getUnitController().getMonsterController().getMonsterInCell(gc.getCursorX(), gc.getCursorY());
-            if (m != null && canIAttackThisTarget(m)) {
+            if (m != null && canIAttackThisTarget(m) && canIMakeAttack()) {
                 attack(m);
             } else {
                 goTo(gc.getCursorX(), gc.getCursorY());
