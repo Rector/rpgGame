@@ -2,9 +2,7 @@ package rpg.game.game;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import rpg.game.game.GameController;
-import rpg.game.game.Monster;
+import rpg.game.game.units.Monster;
 import rpg.game.helpers.ObjectPool;
 
 public class MonsterController extends ObjectPool<Monster> {

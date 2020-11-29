@@ -24,4 +24,3 @@ public class GameScreen extends AbstractScreen {
         worldRenderer.render();
     }
 }
-

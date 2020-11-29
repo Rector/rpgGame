@@ -48,4 +48,3 @@ public class WorldRenderer {
         ScreenManager.getInstance().pointCameraTo(camX, camY);
     }
 }
-
