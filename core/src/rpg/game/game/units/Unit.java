@@ -5,10 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import lombok.Data;
-import rpg.game.game.BattleCalc;
-import rpg.game.game.GameController;
-import rpg.game.game.GameMap;
-import rpg.game.game.Weapon;
+import rpg.game.game.*;
 import rpg.game.helpers.Assets;
 import rpg.game.helpers.Poolable;
 import rpg.game.helpers.Utils;
@@ -57,6 +54,9 @@ public abstract class Unit implements Poolable {
     float movementMaxTime;
     int targetX, targetY;
     Weapon weapon;
+
+    Armor armor;
+
 
     float innerTimer;
     StringBuilder stringHelper;
