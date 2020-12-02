@@ -38,16 +38,23 @@ chest
   orig: 120, 60
   offset: 0, 0
   index: -1
-grass
+water
   rotate: false
   xy: 426, 486
   size: 60, 60
   orig: 60, 60
   offset: 0, 0
   index: -1
-cursor
+grass
   rotate: false
   xy: 324, 578
+  size: 60, 60
+  orig: 60, 60
+  offset: 0, 0
+  index: -1
+cursor
+  rotate: false
+  xy: 386, 578
   size: 60, 60
   orig: 60, 60
   offset: 0, 0

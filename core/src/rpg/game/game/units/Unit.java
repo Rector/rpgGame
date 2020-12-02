@@ -5,12 +5,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import lombok.Data;
-import rpg.game.game.BattleCalc;
-import rpg.game.game.GameController;
-import rpg.game.game.GameMap;
-import rpg.game.game.Weapon;
+import rpg.game.game.*;
 import rpg.game.helpers.Assets;
 import rpg.game.helpers.Poolable;
+import rpg.game.helpers.Utils;
 
 @Data
 public abstract class Unit implements Poolable {
@@ -56,6 +54,9 @@ public abstract class Unit implements Poolable {
     float movementMaxTime;
     int targetX, targetY;
     Weapon weapon;
+
+    Armor armor;
+
 
     float innerTimer;
     StringBuilder stringHelper;
@@ -122,10 +123,12 @@ public abstract class Unit implements Poolable {
         if (!gc.getGameMap().isCellPassable(argCellX, argCellY) || !gc.getUnitController().isCellFree(argCellX, argCellY)) {
             return;
         }
-        if (stats.movePoints > 0 && Math.abs(argCellX - cellX) + Math.abs(argCellY - cellY) == 1) {
+
+        if ((stats.movePoints - gc.getGameMap().costMoveInCell(argCellX, argCellY)) >= 0 && Math.abs(argCellX - cellX) + Math.abs(argCellY - cellY) == 1) {
             targetX = argCellX;
             targetY = argCellY;
             currentDirection = Direction.getMoveDirection(cellX, cellY, targetX, targetY);
+            stats.movePoints -= gc.getGameMap().costMoveInCell(argCellX, argCellY);
         }
     }
 
@@ -152,7 +155,6 @@ public abstract class Unit implements Poolable {
                 movementTime = 0;
                 cellX = targetX;
                 cellY = targetY;
-                stats.movePoints--;
                 gc.getGameMap().checkAndTakeDrop(this);
             }
         }

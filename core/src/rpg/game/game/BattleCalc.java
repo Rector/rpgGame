@@ -5,7 +5,7 @@ import rpg.game.game.units.Unit;
 
 public class BattleCalc {
     public static int attack(Unit attacker, Unit target) {
-        int out = attacker.getWeapon().getDamage();
+        int out = Armor.damageCorrection(attacker, target);
         out -= target.getStats().getDefence();
         if (out < 0) {
             out = 0;
