@@ -38,7 +38,7 @@ public class MenuScreen extends AbstractScreen {
         Gdx.gl.glClearColor(0, 0, 0.4f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        font72.draw(batch, "RPG", 0, 500, 1280, Align.center, false);
+        font72.draw(batch, "Dungeon", 0, 500, 1280, Align.center, false);
         batch.end();
         stage.draw();
     }
@@ -94,4 +94,3 @@ public class MenuScreen extends AbstractScreen {
         stage.dispose();
     }
 }
-

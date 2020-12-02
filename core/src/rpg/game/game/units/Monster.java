@@ -1,7 +1,6 @@
 package rpg.game.game.units;
 
 import com.badlogic.gdx.math.MathUtils;
-import rpg.game.game.Armor;
 import rpg.game.game.GameController;
 import rpg.game.game.Weapon;
 import rpg.game.helpers.Assets;
@@ -15,9 +14,7 @@ public class Monster extends Unit {
         super(gc, 5, 2, 10, "Bomber");
         this.textureHp = Assets.getInstance().getAtlas().findRegion("hp");
         this.stats.hp = -1;
-        this.weapon = new Weapon(Weapon.Type.SWORD, 3, 1);
-
-        this.armor = new Armor(Armor.TypeArmor.MEDIUM);
+        this.weapon = new Weapon(Weapon.Type.SWORD, 2, 1, 1);
     }
 
     public Monster activate(int cellX, int cellY) {

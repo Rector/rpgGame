@@ -33,38 +33,28 @@ public class WorldRenderer {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        gc.getGameMap().render(batch);
+        gc.getGameMap().renderGround(batch);
+
+        Color cursorColor = Color.WHITE;
+        if (gc.getUnitController().getMonsterController().getMonsterInCell(gc.getCursorX(), gc.getCursorY()) != null) {
+            cursorColor = Color.RED;
+        }
+
+        batch.setColor(cursorColor.r, cursorColor.g, cursorColor.b, 0.5f + 0.1f * (float) Math.sin(gc.getWorldTimer() * 8.0f));
+        batch.draw(cursorTexture, gc.getCursorX() * GameMap.CELL_SIZE, gc.getCursorY() * GameMap.CELL_SIZE);
+        batch.setColor(1, 1, 1, 1);
+
+        gc.getGameMap().renderObjects(batch);
         gc.getUnitController().render(batch, font18);
         gc.getProjectileController().render(batch);
-        batch.setColor(1, 1, 1, 0.5f);
-        batch.draw(cursorTexture, gc.getCursorX() * GameMap.CELL_SIZE, gc.getCursorY() * GameMap.CELL_SIZE);
-
-        Monster m = gc.getUnitController().getMonsterController().getMonsterInCell(gc.getCursorX(), gc.getCursorY());
-        if(m != null){
-            stringHelper.append("Dam.: ").append(m.getWeapon().damage).append("\n")
-                    .append("Rad.: ").append(m.getWeapon().radius);
-            font18.draw(batch, stringHelper, gc.getCursorX() * GameMap.CELL_SIZE, gc.getCursorY() * GameMap.CELL_SIZE);
-            stringHelper.setLength(0);
-        }
-
-        Hero h = gc.getUnitController().getHero();
-        if(gc.getUnitController().getHero().getCellX() == gc.getCursorX() && gc.getUnitController().getHero().getCellY() == gc.getCursorY()){
-            stringHelper.append("Dam.: ").append(h.getWeapon().damage).append("\n")
-                    .append("Rad.: ").append(h.getWeapon().radius);
-            font18.draw(batch, stringHelper, gc.getCursorX() * GameMap.CELL_SIZE, gc.getCursorY() * GameMap.CELL_SIZE);
-            stringHelper.setLength(0);
-        }
-
-        batch.setColor(1, 1, 1, 1);
+        gc.getInfoController().render(batch, font18);
+        gc.getEffectController().render(batch);
         batch.end();
 
         float camX = ScreenManager.getInstance().getCamera().position.x;
         float camY = ScreenManager.getInstance().getCamera().position.y;
         ScreenManager.getInstance().resetCamera();
-        batch.begin();
-        gc.getUnitController().getHero().renderHUD(batch, font24, 10, ScreenManager.WORLD_HEIGHT - 10);
-        batch.end();
-
+        gc.getStage().draw();
         ScreenManager.getInstance().pointCameraTo(camX, camY);
     }
 }
