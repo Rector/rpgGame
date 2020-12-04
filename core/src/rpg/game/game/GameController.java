@@ -70,6 +70,10 @@ public class GameController {
         if (round % 3 == 0) {
             unitController.createMonsterInRandomCell();
         }
+
+        if(round > 1){
+            gameMap.generateBerries();
+        }
     }
 
     public boolean isCellEmpty(int cx, int cy) {

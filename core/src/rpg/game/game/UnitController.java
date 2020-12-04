@@ -77,6 +77,11 @@ public class UnitController {
         monsterController.update(dt);
 
         if (!currentUnit.isActive() || !currentUnit.getStats().doIHaveAnyPoints()) {
+
+            if(currentUnit instanceof Hero){
+                hero.hunger();
+            }
+
             nextTurn();
         }
     }

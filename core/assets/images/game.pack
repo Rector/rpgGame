@@ -87,6 +87,13 @@ hp
   orig: 60, 8
   offset: 0, 0
   index: -1
+berry
+  rotate: false
+  xy: 64, 480
+  size: 30, 22
+  orig: 30, 22
+  offset: 0, 0
+  index: -1
 projectile
   rotate: false
   xy: 304, 388
