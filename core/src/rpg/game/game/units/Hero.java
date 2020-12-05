@@ -88,6 +88,9 @@ public class Hero extends Unit {
         if (satiety <= 0) {
             stats.hp -= 2;
             satiety = 0;
+            if(stats.hp <= 0){
+                ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME_OVER);
+            }
         }
     }
 

@@ -10,6 +10,8 @@ import rpg.game.game.*;
 import rpg.game.helpers.Assets;
 import rpg.game.helpers.Poolable;
 import rpg.game.helpers.Utils;
+import rpg.game.screens.GameOverScreen;
+import rpg.game.screens.ScreenManager;
 
 @Data
 public abstract class Unit implements Poolable {
@@ -127,6 +129,11 @@ public abstract class Unit implements Poolable {
             currentColor = Color.RED;
         }
         gc.getInfoController().setup(getCellCenterX(), getCellTopY(), stringHelper, currentColor);
+
+        if(gc.getUnitController().getHero().stats.hp <= 0){
+            ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAME_OVER);
+        }
+
         if (stats.hp <= 0) {
             gc.getUnitController().removeUnitAfterDeath(this);
             gc.getGameMap().generateDrop(cellX, cellY, 1);
