@@ -67,10 +67,10 @@ public class UnitController {
         currentUnit.startTurn();
     }
 
-    public void render(SpriteBatch batch, BitmapFont font18) {
-        hero.render(batch, font18);
-        monsterController.render(batch, font18);
-    }
+//    public void render(SpriteBatch batch, BitmapFont font18) {
+//        hero.render(batch, font18);
+//        monsterController.render(batch, font18);
+//    }
 
     public void update(float dt) {
         hero.update(dt);

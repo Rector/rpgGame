@@ -5,9 +5,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import lombok.Getter;
 import rpg.game.game.Berry;
 import rpg.game.game.GameController;
@@ -28,8 +31,10 @@ public class Hero extends Unit {
     private Group guiGroup;
     private Label hpLabel;
     private Label goldLabel;
-
     private Label satietyLabel;
+
+    private Group actionGroup;
+    private Label weaponInfo;
 
     public Hero(GameController gc) {
         super(gc, 1, 1, 10, "Hero");
@@ -38,7 +43,10 @@ public class Hero extends Unit {
         this.satietyMax = 8;
         this.satiety = satietyMax;
         this.textureHp = Assets.getInstance().getAtlas().findRegion("hp");
-        this.weapon = new Weapon(Weapon.Type.SPEAR, 2, 2, 0);
+        this.primaryWeapon = gc.getWeaponController().getRandomWeaponByLevel(1);
+        this.secondaryWeapon = gc.getWeaponController().getRandomWeaponByLevel(1);
+        this.currentWeapon = this.primaryWeapon;
+//        this.currentWeapon.setDamage(10);
         this.createGui();
     }
 
@@ -68,20 +76,6 @@ public class Hero extends Unit {
         }
     }
 
-    public void updateGui() {
-        stringHelper.setLength(0);
-        stringHelper.append("Hp: ").append(stats.hp).append(" / ").append(stats.maxHp);
-        hpLabel.setText(stringHelper);
-
-        stringHelper.setLength(0);
-        stringHelper.append("Sat: ").append(satiety).append(" / ").append(satietyMax);
-        satietyLabel.setText(stringHelper);
-
-
-        stringHelper.setLength(0);
-        stringHelper.append(gold);
-        goldLabel.setText(stringHelper);
-    }
 
     public void hunger() {
         satiety--;
@@ -108,6 +102,26 @@ public class Hero extends Unit {
         }
     }
 
+    public void updateGui() {
+        stringHelper.setLength(0);
+        stringHelper.append("Hp: ").append(stats.hp).append(" / ").append(stats.maxHp);
+        hpLabel.setText(stringHelper);
+
+        stringHelper.setLength(0);
+        stringHelper.append("Sat: ").append(satiety).append(" / ").append(satietyMax);
+        satietyLabel.setText(stringHelper);
+
+
+        stringHelper.setLength(0);
+        stringHelper.append(gold);
+        goldLabel.setText(stringHelper);
+
+        stringHelper.setLength(0);
+        stringHelper.append(currentWeapon.getType()).append(" [").append(currentWeapon.getDamage()).append("] *\n");
+        Weapon anotherWeapon = currentWeapon == primaryWeapon ? secondaryWeapon : primaryWeapon;
+        stringHelper.append(anotherWeapon.getType()).append(" [").append(anotherWeapon.getDamage()).append("]\n");
+        weaponInfo.setText(stringHelper);
+    }
 
     public void createGui() {
         this.guiGroup = new Group();
@@ -131,6 +145,24 @@ public class Hero extends Unit {
 
         this.guiGroup.addActor(goldLabel);
         this.guiGroup.setPosition(0, ScreenManager.WORLD_HEIGHT - 60);
+
+        TextButton.TextButtonStyle actionBtnStyle = new TextButton.TextButtonStyle(
+                skin.getDrawable("smButton"), null, null, font24);
+        TextButton switchWeaponButton = new TextButton("Switch weapon", actionBtnStyle);
+        switchWeaponButton.setPosition(200, 0);
+        switchWeaponButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                switchWeapon();
+            }
+        });
+
+        this.actionGroup = new Group();
+        this.weaponInfo = new Label("", labelStyle);
+        this.actionGroup.addActor(weaponInfo);
+        this.actionGroup.addActor(switchWeaponButton);
+        this.actionGroup.setPosition(50, 200);
 
         skin.dispose();
     }

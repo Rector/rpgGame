@@ -1,3 +1,6 @@
 title,level,generic,spear,sword,mace,axe,bow
-leather armor,1,1,-5,0,0,-1,0
-chain mail,1,1,0,1,0,0,0
+leather armor,1,1,0,0,1,0,0
+chain mail,2,3,-2,1,1,0,1
+hard leather armor,1,2,0,0,1,0,2
+soft leather armor,1,1,0,0,1,0,0
+monster skin,1,0,0,0,0,0,0

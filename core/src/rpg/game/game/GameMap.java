@@ -39,9 +39,13 @@ public class GameMap {
         }
     }
 
-    public static final int CELLS_X = 22;
-    public static final int CELLS_Y = 12;
-    public static final int CELL_SIZE = 60;
+    public static final int CELLS_X = 32;
+    public static final int CELLS_Y = 32;
+
+    public static final int CELL_WIDTH = 60;
+    public static final int CELL_HEIGHT = 60;
+    public static final int WORLD_WIDTH = CELL_WIDTH * CELLS_X;
+    public static final int WORLD_HEIGHT = CELL_HEIGHT * CELLS_Y;
     public static final int FOREST_PERCENTAGE = 5;
 
     public int getCellsX() {
@@ -89,7 +93,7 @@ public class GameMap {
         for (int i = 0; i < CELLS_X; i++) {
             for (int j = 0; j < CELLS_Y; j++) {
                 if (data[i][j].type == CellType.TREE) {
-                   listBerry.add(new Berry(i,j));
+                    listBerry.add(new Berry(i, j));
                 }
             }
         }
@@ -113,32 +117,23 @@ public class GameMap {
         return true;
     }
 
-    public void renderGround(SpriteBatch batch) {
-        for (int i = 0; i < CELLS_X; i++) {
-            for (int j = CELLS_Y - 1; j >= 0; j--) {
-                batch.draw(grassTexture, i * CELL_SIZE, j * CELL_SIZE);
-            }
-        }
+    public void renderGround(SpriteBatch batch, int cx, int cy) {
+        batch.draw(grassTexture, cx * CELL_WIDTH, cy * CELL_HEIGHT);
     }
 
-    public void renderObjects(SpriteBatch batch) {
-        for (int i = 0; i < CELLS_X; i++) {
-            for (int j = CELLS_Y - 1; j >= 0; j--) {
-                if (data[i][j].type == CellType.TREE) {
-                    batch.draw(treesTextures[data[i][j].index], i * CELL_SIZE, j * CELL_SIZE);
-                }
-
-
-                for (int k = 0; k < listBerry.size(); k++) {
-                    if(i == listBerry.get(k).getBerryX() && j == listBerry.get(k).getBerryY() && listBerry.get(k).isVisible() ){
-                        batch.draw(berryTexture, i * CELL_SIZE + 15, j * CELL_SIZE + 25);
-                    }
-                }
-
-                if (data[i][j].dropType == DropType.GOLD) {
-                    batch.draw(goldTexture, i * CELL_SIZE, j * CELL_SIZE);
-                }
+    public void renderObjects(SpriteBatch batch, int cx, int cy) {
+        if (data[cx][cy].type == CellType.TREE) {
+            batch.draw(treesTextures[data[cx][cy].index], cx * CELL_WIDTH, cy * CELL_HEIGHT);
+        }
+// Проверить
+        for (int k = 0; k < listBerry.size(); k++) {
+            if (cx == listBerry.get(k).getBerryX() && cy == listBerry.get(k).getBerryY() && listBerry.get(k).isVisible()) {
+                batch.draw(berryTexture, cx * CELL_WIDTH + 15, cy * CELL_HEIGHT + 25);
             }
+        }
+
+        if (data[cx][cy].dropType == DropType.GOLD) {
+            batch.draw(goldTexture, cx * CELL_WIDTH, cy * CELL_HEIGHT);
         }
     }
 

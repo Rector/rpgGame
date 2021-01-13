@@ -5,7 +5,10 @@ import lombok.Getter;
 
 @Getter
 public class Stats {
+    static int[] expTo = {30, 250, 500, 1000, 2500, 5000, 10000};
+
     int level;
+    int exp;
     int hp, maxHp;
     int attackPoints, minAttackPoints, maxAttackPoints;
     int movePoints, minMovePoints, maxMovePoints;
@@ -20,6 +23,16 @@ public class Stats {
         this.minMovePoints = minMovePoints;
         this.maxMovePoints = maxMovePoint;
         this.visionRadius = 5;
+    }
+
+    public void addExp(int amount) {
+        exp += amount;
+        if (exp >= expTo[level - 1]) {
+            exp -= expTo[level - 1];
+            level++;
+            maxHp += 2;
+            fullRestoreHp();
+        }
     }
 
     public void restorePoints() {

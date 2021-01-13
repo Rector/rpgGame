@@ -21,6 +21,7 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         gameController.update(delta);
+        worldRenderer.update(delta);
         worldRenderer.render();
     }
 }

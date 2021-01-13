@@ -38,9 +38,9 @@ public class MonsterController extends ObjectPool<Monster> {
         checkPool();
     }
 
-    public void render(SpriteBatch batch, BitmapFont font18) {
-        for (int i = 0; i < getActiveList().size(); i++) {
-            getActiveList().get(i).render(batch, font18);
-        }
-    }
+//    public void render(SpriteBatch batch, BitmapFont font18) {
+//        for (int i = 0; i < getActiveList().size(); i++) {
+//            getActiveList().get(i).render(batch, font18);
+//        }
+//    }
 }

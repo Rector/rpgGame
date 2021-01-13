@@ -26,6 +26,7 @@ public class GameController {
     private Stage stage;
     private ProjectileController projectileController;
     private ArmourController armourController;
+    private WeaponController weaponController;
     private InfoController infoController;
     private UnitController unitController;
     private EffectController effectController;
@@ -48,6 +49,7 @@ public class GameController {
         this.pressedMouse = new Vector2(0, 0);
         this.gameMap = new GameMap();
         this.armourController = new ArmourController(this);
+        this.weaponController = new WeaponController(this);
         this.effectController = new EffectController();
         this.unitController = new UnitController(this);
         this.projectileController = new ProjectileController();
@@ -56,6 +58,7 @@ public class GameController {
         this.round = 1;
         this.createGui();
         this.stage.addActor(unitController.getHero().getGuiGroup());
+        this.stage.addActor(unitController.getHero().getActionGroup());
 //        this.music = Gdx.audio.newMusic(Gdx.files.internal("music/theme.mp3"));
 //        this.music.setLooping(true);
 //        this.music.play();
@@ -102,14 +105,30 @@ public class GameController {
             camX += pressedMouse.x - mouse.x;
             camY += pressedMouse.y - mouse.y;
 
+            if(camX < ScreenManager.HALF_WORLD_WIDTH){
+                camX = ScreenManager.HALF_WORLD_WIDTH;
+            }
+
+            if (camX > GameMap.WORLD_WIDTH - ScreenManager.HALF_WORLD_WIDTH) {
+                camX = GameMap.WORLD_WIDTH - ScreenManager.HALF_WORLD_WIDTH;
+            }
+
+            if (camY < ScreenManager.HALF_WORLD_HEIGHT) {
+                camY = ScreenManager.HALF_WORLD_HEIGHT;
+            }
+
+            if (camY > GameMap.WORLD_HEIGHT - ScreenManager.HALF_WORLD_HEIGHT) {
+                camY = GameMap.WORLD_HEIGHT - ScreenManager.HALF_WORLD_HEIGHT;
+            }
+
             mouse.x += pressedMouse.x - mouse.x;
             mouse.y += pressedMouse.y - mouse.y;
 
             ScreenManager.getInstance().pointCameraTo(camX, camY);
         }
 
-        cursorX = (int) (mouse.x / GameMap.CELL_SIZE);
-        cursorY = (int) (mouse.y / GameMap.CELL_SIZE);
+        cursorX = (int) (mouse.x / GameMap.CELL_WIDTH);
+        cursorY = (int) (mouse.y / GameMap.CELL_HEIGHT);
 
         pressedMouse.set(mouse);
     }
